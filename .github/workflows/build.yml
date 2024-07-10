@@ -21,10 +21,14 @@ jobs:
       with:
         python-version: '3.12.0'   # Ustawienie konkretnej wersji Pythona
 
+    - name: Upgrade pip, setuptools, and wheel
+      run: |
+        pip install --upgrade pip setuptools wheel
+
     - name: Install dependencies
       run: |
         pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
-        # Zalecamy zainstalowanie wszystkich zależności w jednym poleceniu pip, aby uniknąć problemów z niezgodnościami wersji
+      shell: PowerShell
 
     - name: Set execution policy
       run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -43,4 +47,5 @@ jobs:
       with:
         name: data-converter
         path: dist/project.exe
+
 
