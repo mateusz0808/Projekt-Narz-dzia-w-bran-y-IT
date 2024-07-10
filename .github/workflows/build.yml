@@ -19,12 +19,16 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.12.0'   # Ustawienie konkretnej wersji Pythona
 
     - name: Install dependencies
       run: |
-        pip install pyinstaller pyyaml lxml PyQt5
+        pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
         # Zalecamy zainstalowanie wszystkich zależności w jednym poleceniu pip, aby uniknąć problemów z niezgodnościami wersji
+
+    - name: Set execution policy
+      run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+      shell: PowerShell
 
     - name: Run installation script
       run: |
@@ -39,3 +43,4 @@ jobs:
       with:
         name: data-converter
         path: dist/project.exe
+
