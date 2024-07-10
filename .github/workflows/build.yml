@@ -30,6 +30,12 @@ jobs:
         pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
       shell: PowerShell
 
+    - name: Find project.py
+      run: |
+        echo "Looking for project.py..."
+        Get-ChildItem -Recurse -Filter project.py | ForEach-Object { Write-Output $_.FullName }
+      shell: PowerShell
+
     - name: Set execution policy
       run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
       shell: PowerShell
@@ -40,7 +46,7 @@ jobs:
       shell: PowerShell
 
     - name: Build executable
-      run: pyinstaller.exe --onefile --noconsole project.py
+      run: pyinstaller.exe --onefile --noconsole path_to_your_project.py  # Zaktualizowana ścieżka do pliku
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
