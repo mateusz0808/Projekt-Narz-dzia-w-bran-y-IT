@@ -5,13 +5,13 @@ on:
     branches:
       - main
   schedule:
-    - cron: '0 0 * * 1'   # Uruchamia się co tydzień w poniedziałki o północy
-  workflow_dispatch:      # Uruchamia się na żądanie użytkownika
+    - cron: '0 0 * * 1'   # Runs every week on Mondays at midnight
+  workflow_dispatch:      # Runs on user's request
 
 jobs:
   build:
-    runs-on: windows-latest   # Ustawienie na najnowszy dostępny Windows
-
+    runs-on: windows-latest   # Set to the latest available Windows
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -19,46 +19,35 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.12.0'   # Ustawienie konkretnej wersji Pythona
-
-    - name: Upgrade pip, setuptools, and wheel
-      run: |
-        pip install --upgrade pip setuptools wheel
+        python-version: '3.12.0'
 
     - name: Install dependencies
       run: |
         pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
-      shell: PowerShell
-
-    - name: List directory structure
-      run: |
-        echo "Listing directory structure..."
-        Get-ChildItem -Recurse
-      shell: PowerShell
-
-    - name: Find project.py
-      run: |
-        echo "Looking for project.py..."
-        Get-ChildItem -Recurse -Filter project.py | ForEach-Object { Write-Output $_.FullName }
-      shell: PowerShell
-
-    - name: Set execution policy
-      run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-      shell: PowerShell
+        # It's recommended to install all dependencies in one pip command to avoid version compatibility issues
 
     - name: Run installation script
       run: |
         .\installResources.ps1
       shell: PowerShell
 
+    - name: Find project.py
+      run: |
+        echo "Looking for project.py..."
+        Get-ChildItem -Recurse -Filter project.py | ForEach-Object { Write-Output $_.FullName }
+      shell: pwsh
+
     - name: Build executable
-      run: pyinstaller.exe --onefile --noconsole project.py  # Upewnij się, że ścieżka jest poprawna
+      run: |
+        pyinstaller.exe --onefile --noconsole ./project.py
+      shell: pwsh
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: data-converter
         path: dist/project.exe
+
 
 
 
