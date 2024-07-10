@@ -23,24 +23,28 @@ jobs:
 
     - name: Upgrade pip, setuptools, and wheel
       run: |
-        python -m pip install --upgrade pip setuptools wheel
+        pip install --upgrade pip setuptools wheel
 
     - name: Install dependencies
       run: |
-        python -m pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
+        pip install pyinstaller==4.5 pyyaml==6.0 lxml==4.6.3 PyQt5==5.15.4
+      shell: PowerShell
 
     - name: List directory structure
       run: |
         echo "Listing directory structure..."
         Get-ChildItem -Recurse
+      shell: PowerShell
 
     - name: Find project.py
       run: |
         echo "Looking for project.py..."
         Get-ChildItem -Recurse -Filter project.py | ForEach-Object { Write-Output $_.FullName }
+      shell: PowerShell
 
     - name: Set execution policy
       run: Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+      shell: PowerShell
 
     - name: Run installation script
       run: |
@@ -48,8 +52,7 @@ jobs:
       shell: PowerShell
 
     - name: Build executable
-      run: pyinstaller.exe --onefile --noconsole project.py
-      working-directory: ${{ github.workspace }}   # Upewnij się, że ścieżka jest poprawna
+      run: pyinstaller.exe --onefile --noconsole project.py  # Upewnij się, że ścieżka jest poprawna
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
